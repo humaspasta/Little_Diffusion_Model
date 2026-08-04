@@ -27,6 +27,7 @@ class MakeData():
         x_coords = torch.tensor([val[0] for val in X])
         y_coords = torch.tensor([val[1] for val in X])
         x_max , x_min = x_coords.max() , x_coords.min()
+        
         y_max , y_min = y_coords.max() , y_coords.min()
         
 
