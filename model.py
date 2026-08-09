@@ -7,11 +7,13 @@ class basic_model(nn.Module):
     def __init__(self):
         super().__init__()
         self.model = nn.Sequential(
-            nn.Linear(3,16),
+            nn.Linear(3,256),
             nn.ReLU(),
-            nn.Linear(16,8),
+            nn.Linear(256,128),
             nn.ReLU(),
-            nn.Linear(8,2)
+            nn.Linear(128,64),
+            nn.ReLU(),
+            nn.Linear(64,2),
         )
 
     def forward(self , x):

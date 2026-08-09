@@ -6,6 +6,7 @@ import math
 
 def train_two_moons_diffuse(x_data , y_data, model, optimizer, epochs=10000, noise_steps=100):
     assert len(x_data) == len(y_data) 
+    loss_arr = []
     betas = torch.linspace(1e-4, 0.02, steps=noise_steps)
     alphas = 1 - betas
 
@@ -24,14 +25,16 @@ def train_two_moons_diffuse(x_data , y_data, model, optimizer, epochs=10000, noi
         inp_x = torch.sqrt(alpha_bars[t])*x_0 + torch.sqrt(1-alpha_bars[t])*s_epsilon[0]
         inp_y = torch.sqrt(alpha_bars[t])*y_0 + torch.sqrt(1-alpha_bars[t])*s_epsilon[1]
 
-        epsilons = model(x=torch.tensor(data=[inp_x , inp_y, t] ,dtype=torch.float32))
+        epsilons = model(x=torch.tensor(data=[inp_x , inp_y, t/noise_steps] ,dtype=torch.float32).detach())
 
-        print(epsilons)
         loss = torch.nn.functional.mse_loss(epsilons, s_epsilon)
+        loss_arr.append(loss.item())
         
         print(f"\r Epoch {i} loss: {loss.item()}",end="",flush=True)
         loss.backward()
         optimizer.step()
+
+    return loss_arr
     
 
 def recreate_two_moons_dataset(model , T):
@@ -51,7 +54,7 @@ def recreate_two_moons_dataset(model , T):
             z = torch.randn(2)
         else:
             z = torch.zeros(2)
-        model_vals = model(x=torch.tensor([x_t , y_t , t] , dtype=torch.float32))
+        model_vals = model(x=torch.tensor([x_t , y_t , t/T] , dtype=torch.float32))
 
         in_x = ((1-alphas[t]) / (math.sqrt(1 - alpha_bars[t]))) * model_vals[0]
         in_y = ((1-alphas[t]) / (math.sqrt(1 - alpha_bars[t]))) * model_vals[1]
