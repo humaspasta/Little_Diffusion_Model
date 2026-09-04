@@ -24,27 +24,15 @@ class MakeData():
         return res
     
     def normalize(self, X):
-        x_coords = torch.tensor([val[0] for val in X])
-        y_coords = torch.tensor([val[1] for val in X])
-        x_max , x_min = x_coords.max() , x_coords.min()
-        
-        y_max , y_min = y_coords.max() , y_coords.min()
-        
+        X = torch.tensor(X, dtype=torch.float32)
+        x_coords = X[:, 0]
+        y_coords = X[:, 1]
 
-
-        x_mean = x_coords.mean()
-        y_mean = y_coords.mean()
-
-        #center so that sample mean is 0
-        x_coords = x_coords - x_mean 
-        y_coords = y_coords-y_mean
-
-        #normalize each between zero and one using min-max normalization
-        x_coords = (x_coords - x_min) / (x_max - x_min)
-        y_coords = (y_coords - y_min) / (y_max - y_min)
+        # min-max normalize each dimension to [-1, 1]
+        x_coords = (x_coords - x_coords.min()) / (x_coords.max() - x_coords.min()) * 2 - 1
+        y_coords = (y_coords - y_coords.min()) / (y_coords.max() - y_coords.min()) * 2 - 1
 
         return x_coords, y_coords
-
 
 
         

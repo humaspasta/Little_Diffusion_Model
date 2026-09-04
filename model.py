@@ -13,7 +13,13 @@ class basic_model(nn.Module):
             nn.ReLU(),
             nn.Linear(128,64),
             nn.ReLU(),
-            nn.Linear(64,2),
+            nn.Linear(64 , 32),
+            nn.ReLU(),
+            nn.Linear(32 , 16),
+            nn.ReLU(),
+            nn.Linear(16 , 8),
+            nn.ReLU(),
+            nn.Linear(8,2)
         )
 
     def forward(self , x):
