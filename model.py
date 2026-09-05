@@ -24,3 +24,8 @@ class basic_model(nn.Module):
 
     def forward(self , x):
         return self.model(x)
+
+class Unet(nn.Module):
+    super().__init__()
+
+    

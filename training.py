@@ -3,9 +3,20 @@ from model import basic_model
 import random
 import math
 from torch.utils.data import TensorDataset, DataLoader
+import os
 
+def train_pattern_diffuse(x_data , y_data, model, optimizer, epochs=1000, noise_steps=100,batch_size=1 , name='model'):
+    '''
+    x_data: the set of points on the x-axis
+    y_data: the set of corresponding points on the y_axis
+    optimizer: The pytorch optimizer for training (I used Adam)
+    epochs: number of epochs
+    noise_steps: number of noisy steps you want to train with
+    batch_size: number of batches for training
+    name: the filename for the model you wish to save in ./weights 
 
-def train_two_moons_diffuse(x_data , y_data, model, optimizer, epochs=1000, noise_steps=100,batch_size=1):
+    Returns: array of floats for loss
+    '''
     assert len(x_data) == len(y_data) 
 
     data = torch.stack([x_data , y_data] , dim = 1) #stacked so that [(x_0 , y_0), (x_1,y_1), ... , (x_n,y_n)]^T for all n points
@@ -20,13 +31,13 @@ def train_two_moons_diffuse(x_data , y_data, model, optimizer, epochs=1000, nois
 
     alpha_bars = torch.cumprod(alphas, dim=0)
 
-   
+    saved_path = os.path.join('.' ,'weights', name)
 
     for i in range(epochs):
         for batch in loader:
 
             optimizer.zero_grad()
-
+            
             points = batch[0]
             
 
@@ -51,12 +62,19 @@ def train_two_moons_diffuse(x_data , y_data, model, optimizer, epochs=1000, nois
             loss.backward()
             optimizer.step()
 
+    torch.save(model.state_dict(), saved_path)
+
     return loss_arr
     
 
-def recreate_two_moons_dataset(model , T , n_samples=200):
+def recreate_pattern_dataset(model , T , n_samples=200):
+
     '''
-    This is the sampling step for two moons
+    This is the sampling step for any pattern. The sampling step is the step used to recreate your pattern.
+
+    model: the trained model
+    T: The number of time steps used for training
+    n_samples: the number of samples you want in your batch size (generation is done on a batched basis)
     '''
     with torch.no_grad():
         x_t = torch.randn(n_samples , 2)
@@ -77,8 +95,6 @@ def recreate_two_moons_dataset(model , T , n_samples=200):
             x_t = (1/math.sqrt(alphas[t])) * (x_t - ((1 - alphas[t]) / math.sqrt(1 - alpha_bars[t])) * model_vals) + math.sqrt(betas[t]) * z
             if t % 100 == 0:
                 print(f'\r Step {t}' , end='\n', flush=True)
-
-
     return x_t
             
 
