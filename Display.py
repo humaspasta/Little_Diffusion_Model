@@ -1,6 +1,5 @@
 import os
-import torch 
-import numpy 
+import torch  
 from model import basic_model
 import training 
 import matplotlib.pyplot as plt

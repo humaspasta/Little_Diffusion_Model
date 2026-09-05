@@ -17,6 +17,7 @@ def train_pattern_diffuse(x_data , y_data, model, optimizer, epochs=1000, noise_
 
     Returns: array of floats for loss
     '''
+
     assert len(x_data) == len(y_data) 
 
     data = torch.stack([x_data , y_data] , dim = 1) #stacked so that [(x_0 , y_0), (x_1,y_1), ... , (x_n,y_n)]^T for all n points
@@ -37,11 +38,9 @@ def train_pattern_diffuse(x_data , y_data, model, optimizer, epochs=1000, noise_
         for batch in loader:
 
             optimizer.zero_grad()
-            
+
             points = batch[0]
             
-
-
             t = torch.randint(0, noise_steps, (len(points),)) # get time steps for noise ()
 
             a_bars = alpha_bars[t].unsqueeze(1) #
@@ -90,7 +89,6 @@ def recreate_pattern_dataset(model , T , n_samples=200):
             inp = torch.cat([x_t , t_normal] , dim = 1)
 
             model_vals = model(x=inp)
-
 
             x_t = (1/math.sqrt(alphas[t])) * (x_t - ((1 - alphas[t]) / math.sqrt(1 - alpha_bars[t])) * model_vals) + math.sqrt(betas[t]) * z
             if t % 100 == 0:

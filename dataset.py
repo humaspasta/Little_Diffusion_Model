@@ -20,9 +20,6 @@ class MakeData():
         patterns['swiss roles'] = make_swiss_roll 
         patterns['circles'] = make_circles 
 
-
-        
-
         if type not in patterns.keys():
             raise ValueError('Pattern type not in patterns list. Please choose a pattern that exists.')
         X , y = patterns[type](n_points)
