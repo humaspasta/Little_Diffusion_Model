@@ -19,16 +19,14 @@ flowchart LR
 ### Results
 For 1000 epochs of training, the diffusion model could successfully sample the moons and circles patterns efficiently. The following are visualizations of the results: 
 
+## Results
 
-![](Figures/moons.png)
-![](Figures/circles.png)
+| Moons | Circles | Blobs | Swiss Rolls |
+|---|---|---|---|
+| ![](Figures/moons.png) | ![](Figures/circles.png) | ![](Figures/blobs.png) | ![](Figures/swiss_roles.png)| 
 
-With the latter two patterns (swiss roles and blobs), the model could not fit as accurately. Future training for training on more complex patterns involves increasing the epochs and batch size for training.
 
-
-![](Figures/blobs.png)
-![](Figures/swiss_roles.png)
-
+Making these models better involves increasing the number of epochs and batch size. 
 
 ### 1. Data generation and processing
 
