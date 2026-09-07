@@ -16,6 +16,18 @@ flowchart LR
     E --> F["Visualization<br/>(matplotlib overlay)"]
 ```
 
+### Results
+For 1000 epochs of training, the diffusion model could successfully sample the moons and circles patterns efficiently. The following are visualizations of the results: 
+
+
+![](Figures/moons.png)
+![](Figures/circles.png)
+
+With the latter two patterns (swiss roles and blobs), the model could recreate the precise pattern around some local point but could not accurately position it. 
+
+
+![](Figures/blobs.png)
+
 ### 1. Data generation and processing
 
 Synthetic 2D point patterns are generated with **scikit-learn** (`make_moons`,
