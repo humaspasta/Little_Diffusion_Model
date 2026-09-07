@@ -23,10 +23,12 @@ For 1000 epochs of training, the diffusion model could successfully sample the m
 ![](Figures/moons.png)
 ![](Figures/circles.png)
 
-With the latter two patterns (swiss roles and blobs), the model could recreate the precise pattern around some local point but could not accurately position it. 
+With the latter two patterns (swiss roles and blobs), the model could not fit as accurately. Future training for training on more complex patterns involves increasing the epochs and batch size for training.
 
 
 ![](Figures/blobs.png)
+![](Figures/swiss_roles.png)
+
 
 ### 1. Data generation and processing
 
