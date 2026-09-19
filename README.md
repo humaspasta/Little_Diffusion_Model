@@ -145,7 +145,7 @@ JavaScript · ONNX Runtime Web
 | `Main.py` | Entry point for training a pattern |
 | `Display.py` | Loads a trained model, runs reverse sampling, and plots results against the real data |
 | `export_onnx.py` | Exports trained weights to ONNX for the web visualizer |
-| `webapp/` | Browser-based visualizer — loads ONNX models with ONNX Runtime Web and animates reverse sampling live on a canvas |
+| `docs/` | Browser-based visualizer — loads ONNX models with ONNX Runtime Web and animates reverse sampling live on a canvas |
 
 ## Getting started
 
