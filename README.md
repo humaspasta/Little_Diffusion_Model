@@ -14,6 +14,8 @@ flowchart LR
     C --> D["Train noise-prediction<br/>network (PyTorch)"]
     D --> E["Reverse sampling<br/>(iterative denoising)"]
     E --> F["Visualization<br/>(matplotlib overlay)"]
+    D --> G["ONNX export"]
+    G --> H["Browser visualizer<br/>(ONNX Runtime Web)"]
 ```
 
 ### 1. Data generation and processing
@@ -91,22 +93,29 @@ training distribution.
 points directly against the real data distribution, producing a side-by-side scatter
 plot that visually confirms whether the model has learned the target pattern's shape.
 
+### 5. Browser visualizer
+
+`export_onnx.py` exports the trained PyTorch weights to ONNX with a named `input`/
+`output` interface and a dynamic batch axis. The `webapp/` frontend (`sketch.js`) loads
+a model with **ONNX Runtime Web**, then runs the same reverse-sampling loop described
+above entirely client-side — batching all samples into a single inference call per
+timestep and redrawing the canvas every few steps so you can watch the noise resolve
+into the chosen pattern in real time.
+
 ## Current status and roadmap
 
 - **Working today:** data generation and normalization, the full forward/training
-  loop, and reverse sampling with a local matplotlib comparison plot (`Display.py`).
-- **In progress:** a browser-based visualizer (p5.js + ONNX Runtime Web) intended to
-  animate the reverse denoising process step by step, with the trained model already
-  exported to ONNX (`export_onnx.py`) — the frontend integration itself is not yet
-  working.
+  loop, reverse sampling with a local matplotlib comparison plot (`Display.py`), and a
+  browser-based visualizer (`webapp/`) that loads the trained models via ONNX Runtime
+  Web and animates the reverse denoising process live on a canvas.
 - **Next steps:** replace the small dense network with a U-Net backbone to scale from
   2D point patterns to image generation, and serve the larger model through a Flask
   backend once client-side inference is no longer practical at that scale.
 
 ## Tech stack
 
-Python · PyTorch · scikit-learn · matplotlib · ONNX (export, in progress) ·
-JavaScript / p5.js (in progress)
+Python · PyTorch · scikit-learn · matplotlib · ONNX (export) ·
+JavaScript · ONNX Runtime Web
 
 ## Repository structure
 
@@ -117,8 +126,8 @@ JavaScript / p5.js (in progress)
 | `training.py` | Forward diffusion, the training loop, and reverse sampling |
 | `Main.py` | Entry point for training a pattern |
 | `Display.py` | Loads a trained model, runs reverse sampling, and plots results against the real data |
-| `export_onnx.py` | Exports trained weights to ONNX (for the in-progress web visualizer) |
-| `webapp/` | Browser-based visualizer — in progress, not yet working |
+| `export_onnx.py` | Exports trained weights to ONNX for the web visualizer |
+| `webapp/` | Browser-based visualizer — loads ONNX models with ONNX Runtime Web and animates reverse sampling live on a canvas |
 
 ## Getting started
 
@@ -128,6 +137,11 @@ cd Little_Diffusion_Model
 pip install -r requirements.txt
 python Main.py        # trains a model on the configured pattern
 python Display.py      # samples from a trained model and plots the result
+python export_onnx.py  # exports trained weights (weights/<pattern>) to Onnx_files/
+
+cd webapp
+python3 -m http.server 8000   # serve the visualizer (needed for the ONNX fetch to work)
+# open http://localhost:8000 and click Generate
 ```
 
 ## Notes

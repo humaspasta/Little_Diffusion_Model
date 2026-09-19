@@ -15,9 +15,19 @@ for pattern in patterns:
     model.eval()
     dummy_input = torch.randn(1,3)
 
-    torch.onnx.export(model , dummy_input, save_path)
-    print(f"Exported {pattern}: {os.path.getsize(save_path) / 1024:.1f} KB") 
+    torch.onnx.export(
+    model,
+    dummy_input,
+    save_path,
+    export_params=True,
+    opset_version=11,
+    input_names=['input'],
+    output_names=['output'],
+    dynamic_axes={'input': {0: 'batch'}, 'output': {0: 'batch'}},
+    dynamo=False,
+    )
 
+    print(f"Exported {pattern}: {os.path.getsize(save_path) / 1024:.1f} KB") 
 
 
     

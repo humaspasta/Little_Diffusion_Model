@@ -75,24 +75,29 @@ def recreate_pattern_dataset(model , T , n_samples=200):
     T: The number of time steps used for training
     n_samples: the number of samples you want in your batch size (generation is done on a batched basis)
     '''
-    with torch.no_grad():
-        x_t = torch.randn(n_samples , 2)
+    with torch.no_grad(): 
+        x_t = torch.randn(n_samples , 2) # sample_two_gaussian
         
-        betas = torch.linspace(1e-4, 0.02, steps=T)
-        alphas = 1 - betas
-        alpha_bars = torch.cumprod(alphas, dim=0)
-    
-        for t in range(T-1, -1, -1):
-            z = torch.randn(n_samples, 2) if t >= 1 else torch.zeros(n_samples, 2)
+        betas = torch.linspace(1e-4, 0.02, steps=T) # create the beta schedule 
+        alphas = 1 - betas # create the alpha schedule
+        alpha_bars = torch.cumprod(alphas, dim=0) # create the alpha_bars schedule
 
+        for t in range(T-1, -1, -1): # all the steps in here encapsulate one complete update 
+            z = torch.randn(n_samples, 2) if t >= 1 else torch.zeros(n_samples, 2)
+        
             t_normal = torch.full((n_samples , 1) , t/T)
             inp = torch.cat([x_t , t_normal] , dim = 1)
-
+            
             model_vals = model(x=inp)
+
+            # --------- Step 1 up to here ------- # this is the sampling and model step
+
+
 
             x_t = (1/math.sqrt(alphas[t])) * (x_t - ((1 - alphas[t]) / math.sqrt(1 - alpha_bars[t])) * model_vals) + math.sqrt(betas[t]) * z
             if t % 100 == 0:
                 print(f'\r Step {t}' , end='\n', flush=True)
+            #--------- Step 2 update step up to here ------ #
     return x_t
             
 
