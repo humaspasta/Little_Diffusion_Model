@@ -18,6 +18,18 @@ flowchart LR
     G --> H["Browser visualizer<br/>(ONNX Runtime Web)"]
 ```
 
+### Results
+For 1000 epochs of training, the diffusion model could successfully sample the moons and circles patterns efficiently. The following are visualizations of the results: 
+
+## Results
+
+| Moons | Circles | Blobs | Swiss Rolls |
+|---|---|---|---|
+| ![](Figures/moons.png) | ![](Figures/circles.png) | ![](Figures/blobs.png) | ![](Figures/swiss_roles.png)| 
+
+
+Making these models better involves increasing the number of epochs and batch size. 
+
 ### 1. Data generation and processing
 
 Synthetic 2D point patterns are generated with **scikit-learn** (`make_moons`,
