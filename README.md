@@ -3,7 +3,13 @@
 A from-scratch implementation of a Denoising Diffusion Probabilistic Model (DDPM),
 following Ho, Jain, and Abbeel's original paper, trained to generate 2D synthetic
 patterns (moons, circles, swiss rolls) and visualized by comparing the model's learned
-samples against the real data distribution.
+samples against the real data distribution. 
+
+The visualizer is deployed on GitHub pages. If you want to visualize the diffusion process yourself,
+please check out the following link:
+
+https://humaspasta.github.io/Little_Diffusion_Model/
+
 
 ## How it works
 
