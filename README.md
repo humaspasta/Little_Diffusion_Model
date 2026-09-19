@@ -169,3 +169,7 @@ Abbeel, 2020), adapted to small 2D synthetic datasets rather than images. Traini
 points instead of pixels keeps iteration fast and makes every part of the diffusion
 process — forward noising, learned denoising, and final sample quality — directly
 visible as points moving in a 2D plane.
+
+## Sources
+
+https://arxiv.org/abs/2006.11239 -> Denoising Diffusion Probabilistic Models (Jonathan Ho, Ajay Jain, Pieter Abbeel) : Diffusion Model Paper
